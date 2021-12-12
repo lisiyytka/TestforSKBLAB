@@ -1,4 +1,4 @@
-package com.example.testforskb_lab
+package com.example.testforskb_lab.cicerone
 
 import android.widget.ImageView
 import android.widget.Toolbar

@@ -1,12 +1,8 @@
 package com.example.testforskb_lab.repositories
 
-import android.app.DownloadManager
 import android.util.Log
-import android.widget.Toast
-import com.example.testforskb_lab.Screens
+import com.example.testforskb_lab.cicerone.Screens
 import com.example.testforskb_lab.models.Repositories
-import com.example.testforskb_lab.profile.ProfileFragment
-import com.example.testforskb_lab.repositories.RepositoriesView
 import com.example.testforskb_lab.retrofit.RetrofitClient
 import com.github.terrakok.cicerone.Router
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

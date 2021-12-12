@@ -1,8 +1,6 @@
-package com.example.testforskb_lab
+package com.example.testforskb_lab.main
 
-import android.view.View
-import android.widget.Toolbar
-import com.example.testforskb_lab.Screens.Login
+import com.example.testforskb_lab.cicerone.Screens.Login
 import com.github.terrakok.cicerone.Router
 import de.hdodenhof.circleimageview.CircleImageView
 import moxy.InjectViewState

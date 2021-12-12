@@ -93,11 +93,12 @@ class RepositoriesFragment(
             listAllSavedRepos,
             Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
         )
+
         binding.searchIcon.setOnClickListener {
             val list: ArrayList<RepositoriesConstructor> = ArrayList()
             for (i in listAllSavedRepos) {
-                if (i.full_name.contains(binding.search.text) ||
-                    i.description.contains(binding.search.text)) {
+                if (i.full_name.lowercase().contains(binding.search.text.toString().lowercase()) ||
+                    i.description.lowercase().contains(binding.search.text.toString().lowercase())) {
                     list.add(i)
                 }
             }

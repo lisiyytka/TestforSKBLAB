@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testforskb_lab.R
-import com.example.testforskb_lab.Screens
+import com.example.testforskb_lab.cicerone.Screens
 import com.example.testforskb_lab.models.RepositoriesConstructor
 import com.github.terrakok.cicerone.Router
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

@@ -3,9 +3,8 @@ package com.example.testforskb_lab.profile
 import android.content.Context
 import android.view.View
 import com.example.testforskb_lab.SQLite.SQLiteHelper
-import com.example.testforskb_lab.Screens
+import com.example.testforskb_lab.cicerone.Screens
 import com.example.testforskb_lab.createClient
-import com.example.testforskb_lab.login.LoginView
 import com.github.terrakok.cicerone.Router
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import de.hdodenhof.circleimageview.CircleImageView

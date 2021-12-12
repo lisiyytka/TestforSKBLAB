@@ -1,24 +1,16 @@
-package com.example.testforskb_lab
+package com.example.testforskb_lab.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.Toast
-import android.widget.Toolbar
-import androidx.fragment.app.Fragment
 import com.example.testforskb_lab.DI.Scopes
+import com.example.testforskb_lab.R
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import de.hdodenhof.circleimageview.CircleImageView
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import toothpick.Scope
 import toothpick.Toothpick
-import toothpick.ktp.extension.getInstance
 import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainActivityView {

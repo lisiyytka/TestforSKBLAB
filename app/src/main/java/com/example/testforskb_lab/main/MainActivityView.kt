@@ -1,4 +1,4 @@
-package com.example.testforskb_lab
+package com.example.testforskb_lab.main
 
 import com.google.android.material.circularreveal.CircularRevealHelper
 import moxy.MvpView
