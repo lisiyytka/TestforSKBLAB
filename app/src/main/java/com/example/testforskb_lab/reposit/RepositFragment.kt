@@ -25,7 +25,7 @@ class RepositFragment(
     private val date: String,
     private val account: GoogleSignInAccount
 
-    ) : MvpAppCompatFragment(), RepositView {
+) : MvpAppCompatFragment(), RepositView {
 
     @InjectPresenter
     lateinit var repositPresenter: RepositPresenter
@@ -66,7 +66,7 @@ class RepositFragment(
         }
 
         binding.deleteRepos.setOnClickListener {
-            helper.deleteReposFromLocalRepositoryies(account.id.toString(),name)
+            helper.deleteReposFromLocalRepositoryies(account.id.toString(), name)
             binding.deleteRepos.visibility = View.GONE
             binding.saveRepos.visibility = View.VISIBLE
         }

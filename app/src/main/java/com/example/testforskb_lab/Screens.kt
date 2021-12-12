@@ -10,8 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import java.security.acl.Owner
 
 object Screens {
-    fun Login(toolbar: androidx.appcompat.widget.Toolbar) = FragmentScreen { LoginFragment(toolbar) }
-    fun Repositories(toolbar: androidx.appcompat.widget.Toolbar, account: GoogleSignInAccount) = FragmentScreen { RepositoriesFragment(toolbar,account) }
+    fun Login(toolbar: androidx.appcompat.widget.Toolbar) =
+        FragmentScreen { LoginFragment(toolbar) }
+
+    fun Repositories(toolbar: androidx.appcompat.widget.Toolbar, account: GoogleSignInAccount) =
+        FragmentScreen { RepositoriesFragment(toolbar, account) }
+
     fun Reposit(
         full_name: String,
         owner: OwnerConstructor,

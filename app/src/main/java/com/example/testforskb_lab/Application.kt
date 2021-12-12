@@ -9,7 +9,7 @@ import toothpick.Scope
 import toothpick.Toothpick
 import toothpick.configuration.Configuration
 
-class Application: Application(){
+class Application : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -18,14 +18,14 @@ class Application: Application(){
     }
 
     @VisibleForTesting
-    fun initAppScope(appScope: Scope){
+    fun initAppScope(appScope: Scope) {
         appScope.installModules(
             appModule(this)
         )
     }
 
-    private fun initToothpick(){
-        if (BuildConfig.DEBUG){
+    private fun initToothpick() {
+        if (BuildConfig.DEBUG) {
             Toothpick.setConfiguration(Configuration.forDevelopment().preventMultipleRootScopes())
         } else {
             Toothpick.setConfiguration(Configuration.forProduction().preventMultipleRootScopes())

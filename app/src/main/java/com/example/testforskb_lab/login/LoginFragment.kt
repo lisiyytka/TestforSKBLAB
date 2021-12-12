@@ -58,7 +58,7 @@ class LoginFragment(private val toolbar: androidx.appcompat.widget.Toolbar) :
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
-                loginPresenter.signIn(account, toolbar,requireContext())
+                loginPresenter.signIn(account, toolbar, requireContext())
             } catch (e: ApiException) {
                 Log.w(ContentValues.TAG, "Google sign in failed", e)
             }

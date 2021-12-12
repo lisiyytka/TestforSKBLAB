@@ -4,5 +4,5 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
-class RepositPresenter: MvpPresenter<RepositView>() {
+class RepositPresenter : MvpPresenter<RepositView>() {
 }

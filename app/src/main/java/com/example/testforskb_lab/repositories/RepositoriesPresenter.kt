@@ -14,7 +14,7 @@ import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState
-class RepositoriesPresenter: MvpPresenter<RepositoriesView>() {
+class RepositoriesPresenter : MvpPresenter<RepositoriesView>() {
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     fun setSearchRepositories(query: String) {
@@ -32,6 +32,6 @@ class RepositoriesPresenter: MvpPresenter<RepositoriesView>() {
     }
 
     private fun onFailure(t: Throwable) {
-        Log.d("sda",t.message!!)
+        Log.d("sda", t.message!!)
     }
 }

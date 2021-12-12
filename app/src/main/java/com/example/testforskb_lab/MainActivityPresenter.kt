@@ -9,7 +9,8 @@ import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState
-class MainActivityPresenter @Inject constructor(private val router: Router) : MvpPresenter<MainActivityView>() {
+class MainActivityPresenter @Inject constructor(private val router: Router) :
+    MvpPresenter<MainActivityView>() {
     fun startApp(toolbar: androidx.appcompat.widget.Toolbar) {
         router.navigateTo(Login(toolbar))
     }

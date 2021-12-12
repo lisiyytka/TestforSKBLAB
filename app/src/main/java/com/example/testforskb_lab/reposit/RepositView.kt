@@ -5,6 +5,6 @@ import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(value = AddToEndStrategy::class)
-interface RepositView: MvpView {
+interface RepositView : MvpView {
     fun pullFields()
 }

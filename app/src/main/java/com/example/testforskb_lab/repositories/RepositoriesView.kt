@@ -6,7 +6,7 @@ import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(value = AddToEndStrategy::class)
-interface RepositoriesView:MvpView {
+interface RepositoriesView : MvpView {
     fun searchRepos()
     fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>)
 }

@@ -2,8 +2,8 @@ package com.example.testforskb_lab.SQLite.modelsForLocal
 
 import com.example.testforskb_lab.models.OwnerConstructor
 
-class UserForLocal{
-    var id:String = ""
+class UserForLocal {
+    var id: String = ""
 
     constructor()
 
