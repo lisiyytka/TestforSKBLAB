@@ -105,62 +105,21 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         return listMyRepos
     }
 
-    @SuppressLint("Range")
-    fun getMyReposForRecycler(): List<RepositoriesConstructor> {
-        val listMyrepos: MutableList<RepositoriesConstructor> = ArrayList()
-        var db = this.readableDatabase
-        var query = "Select * from $TABLE_NAME_LOCAL_REPOSITORIES"
-        var result = db.rawQuery(query, null)
-        val owner = OwnerConstructor("", "")
-        if (result.moveToFirst()) {
-            do {
-                val repos = RepositoriesConstructor(
-                    result.getString(result.getColumnIndex(LOCAL_REPOSITORIES_FULL_NAME))
-                        .toString(),
-                    owner,
-                    result.getString(result.getColumnIndex(LOCAL_REPOSITORIES_DESCRIPTION))
-                        .toString(),
-                    result.getString(result.getColumnIndex(LOCAL_REPOSITORIES_ID_SAVED_USERS))
-                        .toString(),
-                    result.getString(result.getColumnIndex(LOCAL_REPOSITORIES_WATCHERS)).toString(),
-                    result.getString(result.getColumnIndex(LOCAL_REPOSITORIES_CREATED_AT))
-                        .toString()
-                )
-                listMyrepos.add(repos)
-            } while (result.moveToNext())
-        }
-        result.close()
-        db.close()
-        return listMyrepos
-    }
-
-    @SuppressLint("Range")
-    fun getUsersFromLocal(): List<UserForLocal> {
-        val listUsers: MutableList<UserForLocal> = ArrayList()
-        var db = this.readableDatabase
-        var query = "Select * from $TABLE_NAME_USERS"
-        var result = db.rawQuery(query, null)
-        if (result.moveToFirst()) {
-            do {
-                val users = UserForLocal()
-                users.id = result.getString(result.getColumnIndex(USERS_COL_ID)).toString()
-                listUsers.add(users)
-            } while (result.moveToNext())
-        }
-        result.close()
-        db.close()
-        return listUsers
-    }
-
     fun deleteReposFromLocalRepositoryies(idUser: String, nameRepos: String) {
         val db = this.writableDatabase
         val values = arrayOf(idUser, nameRepos)
-        val success = db.delete(
+        db.delete(
             TABLE_NAME_LOCAL_REPOSITORIES,
             "$LOCAL_REPOSITORIES_ID_SAVED_USERS = ? AND $LOCAL_REPOSITORIES_FULL_NAME = ?",
             values
-        ).toLong()
+        )
         db.close()
-        Log.d("SQL", "$success deleteUsersSavedRepository")
+    }
+
+    fun deleteSavedRepos(idUser: String) {
+        val db = this.writableDatabase
+        val value = arrayOf(idUser)
+        db.delete(TABLE_NAME_LOCAL_REPOSITORIES, "$LOCAL_REPOSITORIES_ID_SAVED_USERS = ?", value)
+        db.close()
     }
 }

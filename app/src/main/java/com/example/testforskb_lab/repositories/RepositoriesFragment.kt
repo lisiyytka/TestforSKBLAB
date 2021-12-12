@@ -10,20 +10,28 @@ import com.example.testforskb_lab.SQLite.SQLiteHelper
 import com.example.testforskb_lab.SQLite.modelsForLocal.ReposForLocal
 import com.example.testforskb_lab.adapters.RecyclerReposAdapter
 import com.example.testforskb_lab.databinding.FragmentRepositoriesBinding
+import com.example.testforskb_lab.login.LoginPresenter
 import com.example.testforskb_lab.models.RepositoriesConstructor
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import de.hdodenhof.circleimageview.CircleImageView
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 import toothpick.ktp.extension.getInstance
 
 class RepositoriesFragment(
     private val toolbar: androidx.appcompat.widget.Toolbar,
-    private val account: GoogleSignInAccount
+    private val account: GoogleSignInAccount,
+    private val imageProfile: CircleImageView
 ) : MvpAppCompatFragment(), RepositoriesView {
 
     @InjectPresenter
     lateinit var repositoriesPresenter: RepositoriesPresenter
+
+    @ProvidePresenter
+    fun providePresenter() =
+        Toothpick.openScope(Scopes.APP_SCOPE).getInstance(RepositoriesPresenter::class.java)
 
     private var _binding: FragmentRepositoriesBinding? = null
     private val binding get() = _binding!!
@@ -44,6 +52,10 @@ class RepositoriesFragment(
 
         toolbar.visibility = View.VISIBLE
 
+        imageProfile.setOnClickListener {
+            repositoriesPresenter.onProfile(account, toolbar, imageProfile)
+        }
+
         val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
         if (binding.search.text.toString() == "")
             showRepos(emptyList)
@@ -52,6 +64,10 @@ class RepositoriesFragment(
             binding.preservedButton.isSelected = true
             binding.repositoriesButton.isSelected = false
             showPreserved()
+        }
+
+        if (account.id.isNullOrEmpty()) {
+            binding.linearLayout.visibility = View.GONE
         }
 
         binding.repositoriesButton.setOnClickListener {
@@ -77,7 +93,19 @@ class RepositoriesFragment(
             listAllSavedRepos,
             Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
         )
-        binding.linearSearch.visibility = View.GONE
+        binding.searchIcon.setOnClickListener {
+            val list: ArrayList<RepositoriesConstructor> = ArrayList()
+            for (i in listAllSavedRepos) {
+                if (i.full_name.contains(binding.search.text) ||
+                    i.description.contains(binding.search.text)) {
+                    list.add(i)
+                }
+            }
+            binding.recyclerView.adapter = RecyclerReposAdapter(
+                list,
+                Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
+            )
+        }
     }
 
     override fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>) {

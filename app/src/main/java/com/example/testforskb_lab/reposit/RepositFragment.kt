@@ -57,6 +57,10 @@ class RepositFragment(
             binding.saveRepos.visibility = View.GONE
         }
 
+        if (account.id.isNullOrEmpty()) {
+            binding.saveRepos.visibility = View.GONE
+        }
+
         val listRepos = helper.getMyRepos(account.id.toString())
         for (i in listRepos) {
             if (i.owner.login == owner.login) {

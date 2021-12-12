@@ -59,7 +59,6 @@
             android:layout_height="50dp"
             android:text="Saved"
             android:textSize="11sp"/>
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

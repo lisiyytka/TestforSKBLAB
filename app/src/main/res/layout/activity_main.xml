@@ -20,20 +20,30 @@
             app:titleTextColor="@android:color/white"
             tools:ignore="MissingConstraints">
 
-            <ImageView
-                android:id="@+id/logout_button"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="14dp"
-                android:src="@drawable/ic_baseline_login_24" />
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_for_img" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="25dp"
+                android:text="Profile"
+                android:textColor="@color/white"
+                android:textSize="24sp"/>
+
         </androidx.appcompat.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,7 @@ fun createClient(
     val gso: GoogleSignInOptions =
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("379999383597-30nutsiarfi94kili4sp91iseqoe78do.apps.googleusercontent.com")
+            .requestEmail()
             .build()
     return GoogleSignIn.getClient(context, gso)
 }

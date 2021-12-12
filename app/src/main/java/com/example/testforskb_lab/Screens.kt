@@ -1,20 +1,27 @@
 package com.example.testforskb_lab
 
+import android.widget.ImageView
 import android.widget.Toolbar
 import com.example.testforskb_lab.login.LoginFragment
 import com.example.testforskb_lab.models.OwnerConstructor
+import com.example.testforskb_lab.profile.ProfileFragment
 import com.example.testforskb_lab.reposit.RepositFragment
 import com.example.testforskb_lab.repositories.RepositoriesFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import de.hdodenhof.circleimageview.CircleImageView
 import java.security.acl.Owner
 
 object Screens {
-    fun Login(toolbar: androidx.appcompat.widget.Toolbar) =
-        FragmentScreen { LoginFragment(toolbar) }
+    fun Login(toolbar: androidx.appcompat.widget.Toolbar, imageProfile: CircleImageView) =
+        FragmentScreen { LoginFragment(toolbar, imageProfile) }
 
-    fun Repositories(toolbar: androidx.appcompat.widget.Toolbar, account: GoogleSignInAccount) =
-        FragmentScreen { RepositoriesFragment(toolbar, account) }
+    fun Repositories(
+        toolbar: androidx.appcompat.widget.Toolbar,
+        account: GoogleSignInAccount,
+        imageProfile: CircleImageView
+    ) =
+        FragmentScreen { RepositoriesFragment(toolbar, account, imageProfile) }
 
     fun Reposit(
         full_name: String,
@@ -35,4 +42,11 @@ object Screens {
             account
         )
     }
+
+    fun Profile(
+        account: GoogleSignInAccount,
+        toolbar: androidx.appcompat.widget.Toolbar,
+        imageProfile: CircleImageView
+    ) =
+        FragmentScreen { ProfileFragment(account, toolbar, imageProfile) }
 }

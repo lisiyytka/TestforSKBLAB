@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.testforskb_lab.DI.Scopes
@@ -21,12 +22,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import de.hdodenhof.circleimageview.CircleImageView
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 
-class LoginFragment(private val toolbar: androidx.appcompat.widget.Toolbar) :
+class LoginFragment(
+    private val toolbar: androidx.appcompat.widget.Toolbar,
+    private val imageProfile: CircleImageView
+) :
     MvpAppCompatFragment(), LoginView {
 
     @InjectPresenter
@@ -49,6 +54,12 @@ class LoginFragment(private val toolbar: androidx.appcompat.widget.Toolbar) :
             val intent = createClient(requireContext()).signInIntent
             mainActivityResultLauncher.launch(intent)
         }
+
+        binding.signInWithoutGoogle.setOnClickListener {
+            val account: GoogleSignInAccount = GoogleSignInAccount.createDefault()
+            loginPresenter.signInWithoutGoogle(account, toolbar, imageProfile)
+        }
+
         return binding.root
     }
 
@@ -58,7 +69,7 @@ class LoginFragment(private val toolbar: androidx.appcompat.widget.Toolbar) :
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
-                loginPresenter.signIn(account, toolbar, requireContext())
+                loginPresenter.signIn(account, toolbar, requireContext(),imageProfile)
             } catch (e: ApiException) {
                 Log.w(ContentValues.TAG, "Google sign in failed", e)
             }

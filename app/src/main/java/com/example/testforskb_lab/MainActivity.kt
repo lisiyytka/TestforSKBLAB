@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.example.testforskb_lab.DI.Scopes
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import de.hdodenhof.circleimageview.CircleImageView
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -39,12 +40,13 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val profile = findViewById<CircleImageView>(R.id.profile_image)
         toolbar.visibility = View.GONE
-        mainActivityPresenter.startApp(toolbar)
-        val logOut = findViewById<ImageView>(R.id.logout_button)
-        logOut.setOnClickListener {
-            createClient(this).signOut()
-            mainActivityPresenter.logOut(toolbar)
+        mainActivityPresenter.startApp(toolbar, profile)
+        profile.setOnClickListener {
+//            createClient(this).signOut()
+//            mainActivityPresenter.logOut(toolbar)
+//            mainActivityPresenter.logOut(toolbar)
         }
     }
 
