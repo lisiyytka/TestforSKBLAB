@@ -28,7 +28,7 @@ class RepositoriesPresenter @Inject constructor(private val router: Router) : Mv
                 .subscribe({ response -> onResponse(response) }, { t -> onFailure(t) })
         )
     }
-
+    //sd
     private fun onResponse(list: Repositories) {
         viewState.showRepos(ArrayList(list.items))
     }
