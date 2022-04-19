@@ -1,4 +1,4 @@
-package com.example.testforskb_lab.data.retrofit
+package com.example.testforskb_lab.DI.retrofit
 
 import com.example.testforskb_lab.data.api.GithubApi
 import retrofit2.Retrofit

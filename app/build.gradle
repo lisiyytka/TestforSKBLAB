@@ -74,4 +74,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //progressView
+    implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 }

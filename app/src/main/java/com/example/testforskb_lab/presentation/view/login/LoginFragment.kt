@@ -53,6 +53,7 @@ class LoginFragment(
         }
 
         return binding.root
+
     }
 
     private var mainActivityResultLauncher =
@@ -63,7 +64,7 @@ class LoginFragment(
                 val account = task.getResult(ApiException::class.java)!!
                 loginPresenter.signIn(account, toolbar, requireContext(),imageProfile)
             } catch (e: ApiException) {
-                Log.w(ContentValues.TAG, "Google sign in failed", e)
+                Log.w("asds", "Google sign in failed", e)
             }
         }
 }

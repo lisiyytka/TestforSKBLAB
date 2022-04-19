@@ -2,9 +2,11 @@ package com.example.testforskb_lab.presentation.view.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.example.testforskb_lab.DI.Scopes
 import com.example.testforskb_lab.R
 import com.example.testforskb_lab.presentation.presenter.MainActivityPresenter
+import com.example.testforskb_lab.presentation.view.repositories.RepositoriesFragment
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import de.hdodenhof.circleimageview.CircleImageView
@@ -34,7 +36,7 @@ class MainActivity : MvpAppCompatActivity(), MainActivityView {
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         val profile = findViewById<CircleImageView>(R.id.profile_image)
-        toolbar.visibility = View.GONE
+
         mainActivityPresenter.startApp(toolbar, profile)
         profile.setOnClickListener {
 //            createClient(this).signOut()

@@ -3,6 +3,7 @@ package com.example.testforskb_lab
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
+import com.github.rahatarmanahmed.cpv.CircularProgressView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -29,4 +30,14 @@ fun createClient(
             .requestEmail()
             .build()
     return GoogleSignIn.getClient(context, gso)
+}
+
+fun startLoading(loader: CircularProgressView){
+    loader.visibility = View.VISIBLE
+    loader.startAnimation()
+}
+
+fun stopLoading(loader: CircularProgressView){
+    loader.visibility =View.GONE
+    loader.stopAnimation()
 }
