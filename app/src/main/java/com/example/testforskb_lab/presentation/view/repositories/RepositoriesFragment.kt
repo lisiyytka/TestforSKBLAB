@@ -11,6 +11,8 @@ import com.example.testforskb_lab.presentation.view.adapters.RecyclerReposAdapte
 import com.example.testforskb_lab.databinding.FragmentRepositoriesBinding
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.presentation.presenter.RepositoriesPresenter
+import com.example.testforskb_lab.startLoading
+import com.example.testforskb_lab.stopLoading
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import de.hdodenhof.circleimageview.CircleImageView
 import moxy.MvpAppCompatFragment
@@ -28,6 +30,8 @@ class RepositoriesFragment(
     @InjectPresenter
     lateinit var repositoriesPresenter: RepositoriesPresenter
 
+    private val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
+
     @ProvidePresenter
     fun providePresenter() =
         Toothpick.openScope(Scopes.APP_SCOPE).getInstance(RepositoriesPresenter::class.java)
@@ -44,8 +48,12 @@ class RepositoriesFragment(
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         binding.repositoriesButton.isSelected = true
+        binding.progressView.visibility = View.GONE
+
+        repositoriesPresenter.emptyList(binding.search.text.toString())
 
         binding.searchIcon.setOnClickListener {
+            startLoading(binding.progressView)
             searchRepos()
         }
 
@@ -54,10 +62,6 @@ class RepositoriesFragment(
         imageProfile.setOnClickListener {
             repositoriesPresenter.onProfile(account, toolbar, imageProfile)
         }
-
-        val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
-        if (binding.search.text.toString() == "")
-            showRepos(emptyList)
 
         binding.preservedButton.setOnClickListener {
             binding.preservedButton.isSelected = true
@@ -85,10 +89,7 @@ class RepositoriesFragment(
     }
 
     private fun showPreserved() {
-        val helper = context?.let { it1 -> SQLiteHelper(it1) }
-        val listAllSavedRepos: ArrayList<RepositoriesConstructor> =
-            helper!!.getMyRepos(account.id!!)
-
+        val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(),account)
         binding.recyclerView.adapter = RecyclerReposAdapter(
             listAllSavedRepos,
             Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
@@ -110,6 +111,7 @@ class RepositoriesFragment(
     }
 
     override fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>) {
+        stopLoading(binding.progressView)
         binding.recyclerView.adapter = RecyclerReposAdapter(
             listRepositories,
             Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
