@@ -42,7 +42,7 @@ class RepositFragment(
         binding.deleteRepos.visibility = View.GONE
         val helper = SQLiteHelper(requireContext())
         binding.saveRepos.setOnClickListener {
-            var repos = ReposForLocal()
+            val repos = ReposForLocal()
             repos.full_name = name
             repos.created_at = date
             repos.description = description
@@ -56,11 +56,13 @@ class RepositFragment(
             binding.saveRepos.visibility = View.GONE
         }
 
+
         if (account.id.isNullOrEmpty()) {
             binding.saveRepos.visibility = View.GONE
         }
 
         val listRepos = helper.getMyRepos(account.id.toString())
+
         for (i in listRepos) {
             if (i.owner.login == owner.login) {
                 binding.deleteRepos.visibility = View.VISIBLE

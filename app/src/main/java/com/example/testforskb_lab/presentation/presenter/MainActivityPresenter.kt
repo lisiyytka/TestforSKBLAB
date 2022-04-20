@@ -11,7 +11,7 @@ import javax.inject.Inject
 @InjectViewState
 class MainActivityPresenter @Inject constructor(private val router: Router) :
     MvpPresenter<MainActivityView>() {
-    fun startApp(toolbar: androidx.appcompat.widget.Toolbar, profileImage: CircleImageView) {
-        router.navigateTo(Login(toolbar, profileImage))
+    fun startApp() {
+        router.navigateTo(Login())
     }
 }

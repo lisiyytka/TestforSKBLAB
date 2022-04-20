@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testforskb_lab.DI.Scopes
 import com.example.testforskb_lab.R
+import com.example.testforskb_lab.data.SQLite.SQLiteHelper
 import com.example.testforskb_lab.presentation.cicerone.Screens
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.presentation.presenter.RepositoriesPresenter
@@ -17,16 +18,13 @@ import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 import javax.inject.Inject
 
-class RecyclerReposAdapter @Inject constructor(
-    private val listRepositories: ArrayList<RepositoriesConstructor>,
-    private val router: Router,
-    private val account: GoogleSignInAccount
-) :
-    RecyclerView.Adapter<RecyclerReposAdapter.RecyclerReposHolder>() {
+
+class RecyclerReposAdapter(private val onItemClicked: (position: Int)-> Unit, listRepositories: ArrayList<RepositoriesConstructor>) :
+    RecyclerView.Adapter<RecyclerReposAdapter.RecyclerReposHolder>(){
 
     class RecyclerReposHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textViewLarge = view.findViewById<TextView>(R.id.textViewLarge)
-        val textViewSmall = view.findViewById<TextView>(R.id.textViewSmall)
+        val textViewLarge: TextView = view.findViewById(R.id.textViewLarge)
+        val textViewSmall: TextView = view.findViewById(R.id.textViewSmall)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerReposHolder {
@@ -36,26 +34,21 @@ class RecyclerReposAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerReposHolder, position: Int) {
-        var repository = listRepositories[position]
+        val repository = listRepositories[position]
         var description = ""
         holder.textViewLarge.text = repository.full_name
         holder.textViewSmall.text = repository.description
-        if (!repository.description.isNullOrEmpty())
+        if (repository.description.isNotEmpty())
             description = repository.description
-        holder.itemView.setOnClickListener {
-            router.navigateTo(
-                Screens.Reposit(
-                    repository.full_name,
-                    repository.owner,
-                    description,
-                    repository.forks,
-                    repository.watchers,
-                    repository.created_at,
-                    account
-                )
-            )
+        holder.itemView.setOnClickListener{
+            onItemClicked(position)
         }
     }
 
     override fun getItemCount(): Int = listRepositories.size
+
+//    override fun onClick(p0: View?) {
+//        val position = pos
+//        onItemClicked()
+//    }
 }

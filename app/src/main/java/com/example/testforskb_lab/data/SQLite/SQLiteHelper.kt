@@ -121,4 +121,21 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         db.delete(TABLE_NAME_LOCAL_REPOSITORIES, "$LOCAL_REPOSITORIES_ID_SAVED_USERS = ?", value)
         db.close()
     }
+
+    @SuppressLint("Range")
+    fun getUser(): UserForLocal {
+        val list: MutableList<UserForLocal> = ArrayList()
+        val user = UserForLocal()
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_NAME_USERS"
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()){
+            do {
+                user.id = result.getString(result.getColumnIndex(USERS_COL_ID)).toString()
+            } while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+        return user
+    }
 }

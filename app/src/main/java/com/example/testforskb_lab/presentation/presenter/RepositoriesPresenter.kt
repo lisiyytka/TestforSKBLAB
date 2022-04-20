@@ -19,11 +19,13 @@ import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState
-class RepositoriesPresenter @Inject constructor(private val router: Router) : MvpPresenter<RepositoriesView>() {
+class RepositoriesPresenter @Inject constructor(private val router: Router) :
+    MvpPresenter<RepositoriesView>() {
 
     private val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
+    private var repositories: Repositories? = null
 
-    private val compositeDisposable : CompositeDisposable = CompositeDisposable()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     fun setSearchRepositories(query: String) {
         compositeDisposable.add(
             RetrofitClient.buildService()
@@ -36,38 +38,46 @@ class RepositoriesPresenter @Inject constructor(private val router: Router) : Mv
 
     private fun onResponse(list: Repositories) {
         viewState.showRepos(ArrayList(list.items))
+        repositories = list
     }
 
     private fun onFailure(t: Throwable) {
         Log.d("sda", t.message!!)
     }
 
-    fun onProfile(account: GoogleSignInAccount, toolbar: androidx.appcompat.widget.Toolbar, imageProfile: CircleImageView) {
-        router.navigateTo(Screens.Profile(account, toolbar, imageProfile))
+    fun onProfile(account: GoogleSignInAccount) {
+        router.navigateTo(Screens.Profile(account))
     }
 
     override fun onDestroy() {
         compositeDisposable.clear()
     }
 
-    fun emptyList(textRequest: String){
+    fun emptyList(textRequest: String) {
         if (textRequest == "")
             viewState.showRepos(emptyList)
     }
 
-    fun getRepos(context: Context,account: GoogleSignInAccount): ArrayList<RepositoriesConstructor> {
+    fun getRepos(
+        context: Context,
+        account: GoogleSignInAccount
+    ): ArrayList<RepositoriesConstructor> {
         val helper = SQLiteHelper(context)
         return helper.getMyRepos(account.id!!)
     }
 
-    fun openRepos(repository: RepositoriesConstructor, description: String){
+    fun onListItemClick(position: Int, list: ArrayList<RepositoriesConstructor>) {
         val account = GoogleSignInAccount.createDefault()
-        router.navigateTo(Screens.Reposit(repository.full_name,
-        repository.owner,
-        description,
-        repository.forks,
-        repository.watchers,
-        repository.created_at,
-        account))
+        router.navigateTo(
+            Screens.Reposit(
+                list[position].full_name,
+                list[position].owner,
+                list[position].description,
+                list[position].forks,
+                list[position].watchers,
+                list[position].created_at,
+                account
+            )
+        )
     }
 }

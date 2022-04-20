@@ -10,15 +10,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import de.hdodenhof.circleimageview.CircleImageView
 
 object Screens {
-    fun Login(toolbar: androidx.appcompat.widget.Toolbar, imageProfile: CircleImageView) =
-        FragmentScreen { LoginFragment(toolbar, imageProfile) }
+    fun Login() =
+        FragmentScreen { LoginFragment() }
 
     fun Repositories(
-        toolbar: androidx.appcompat.widget.Toolbar,
-        account: GoogleSignInAccount,
-        imageProfile: CircleImageView
+        account: GoogleSignInAccount
     ) =
-        FragmentScreen { RepositoriesFragment(toolbar, account, imageProfile) }
+        FragmentScreen { RepositoriesFragment(account) }
 
     fun Reposit(
         full_name: String,
@@ -41,9 +39,7 @@ object Screens {
     }
 
     fun Profile(
-        account: GoogleSignInAccount,
-        toolbar: androidx.appcompat.widget.Toolbar,
-        imageProfile: CircleImageView
+        account: GoogleSignInAccount
     ) =
-        FragmentScreen { ProfileFragment(account, toolbar, imageProfile) }
+        FragmentScreen { ProfileFragment(account) }
 }

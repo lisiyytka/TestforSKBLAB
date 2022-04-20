@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import com.example.testforskb_lab.DI.Scopes
+import com.example.testforskb_lab.R
 import com.example.testforskb_lab.databinding.FragmentProfileBinding
 import com.example.testforskb_lab.picassoHelper
 import com.example.testforskb_lab.presentation.presenter.ProfilePresenter
@@ -16,9 +18,7 @@ import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 
 class ProfileFragment(
-    private val account: GoogleSignInAccount,
-    private val toolbar: androidx.appcompat.widget.Toolbar,
-    private val imageProfile: CircleImageView
+    private val account: GoogleSignInAccount
 ) : MvpAppCompatFragment(),
     ProfileView {
     @InjectPresenter
@@ -37,6 +37,7 @@ class ProfileFragment(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
 
         if (account.id.isNullOrEmpty()) {
             binding.linearCreator.visibility = View.GONE
@@ -51,7 +52,7 @@ class ProfileFragment(
         }
 
         binding.logoutButton.setOnClickListener {
-            profilePresenter.logOut(toolbar, requireContext(), imageProfile)
+            profilePresenter.logOut(toolbar, requireContext())
         }
 
         return binding.root

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.4046296296296296" />
         <entry key="..\:/Users/SKB LAB/StudioProjects/TestforSKBLAB/app/src/main/res/layout/fragment_reposit.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/SKB LAB/StudioProjects/TestforSKBLAB/app/src/main/res/layout/fragment_repositories.xml" value="0.12360688956433637" />
         <entry key="..\:/Users/gritr/AndroidStudioProjects/TestforSKBLAB/app/src/main/res/drawable/frame_for_stars_and_forks.xml" value="0.3828125" />
@@ -18,6 +19,7 @@
         <entry key="..\:/Users/gritr/AndroidStudioProjects/TestforSKBLAB/app/src/main/res/layout/fragment_repositories.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/gritr/AndroidStudioProjects/TestforSKBLAB/app/src/main/res/layout/item_for_repositories.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.44114583333333335" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.32447916666666665" />
         <entry key="app/src/main/res/layout/fragment_repositories.xml" value="0.3938730853391685" />
       </map>
     </option>

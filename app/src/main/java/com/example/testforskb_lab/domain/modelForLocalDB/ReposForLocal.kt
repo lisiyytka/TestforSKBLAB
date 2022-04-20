@@ -1,6 +1,5 @@
 package com.example.testforskb_lab.domain.modelForLocalDB
 
-
 class ReposForLocal {
     var full_name: String = ""
     var owner: String = ""

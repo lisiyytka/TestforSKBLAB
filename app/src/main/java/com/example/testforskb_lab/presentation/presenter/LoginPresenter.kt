@@ -2,6 +2,7 @@ package com.example.testforskb_lab.presentation.presenter
 
 import android.content.Context
 import android.util.Log
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.testforskb_lab.createClient
@@ -21,23 +22,26 @@ import javax.inject.Inject
 @InjectViewState
 class LoginPresenter @Inject constructor(private val router: Router) : MvpPresenter<LoginView>() {
     fun signIn(
-        account: GoogleSignInAccount,
-        toolbar: androidx.appcompat.widget.Toolbar,
-        context: Context,
-        profileImageView: CircleImageView
+        result: ActivityResult,
+        context: Context
     ) {
-        val helper = SQLiteHelper(context)
-        var user = UserForLocal()
-        user.id = account.id.toString()
-        helper.insertUser(user)
-        router.navigateTo(Repositories(toolbar, account, profileImageView))
+        val data = result.data
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            val helper = SQLiteHelper(context)
+            var user = UserForLocal()
+            user.id = account.id.toString()
+            helper.insertUser(user)
+            router.navigateTo(Repositories(account))
+        } catch (e: ApiException) {
+            Log.w("asds", "Google sign in failed", e)
+        }
+
     }
 
-    fun signInWithoutGoogle(
-        account: GoogleSignInAccount,
-        toolbar: androidx.appcompat.widget.Toolbar,
-        profileImageView: CircleImageView
-    ) {
-        router.navigateTo(Repositories(toolbar, account, profileImageView))
+    fun signInWithoutGoogle() {
+        val account: GoogleSignInAccount = GoogleSignInAccount.createDefault()
+        router.navigateTo(Repositories(account))
     }
 }

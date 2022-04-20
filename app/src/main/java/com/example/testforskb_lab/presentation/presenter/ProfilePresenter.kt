@@ -19,9 +19,9 @@ class ProfilePresenter @Inject constructor(private val router: Router) : MvpPres
         val helper = SQLiteHelper(context)
         helper.deleteSavedRepos(account.id.toString())
     }
-    fun logOut(toolbar: androidx.appcompat.widget.Toolbar, context: Context, imageView: CircleImageView) {
+    fun logOut(toolbar: androidx.appcompat.widget.Toolbar, context: Context) {
         createClient(context).signOut()
         toolbar.visibility = View.GONE
-        router.navigateTo(Screens.Login(toolbar, imageView))
+        router.navigateTo(Screens.Login())
     }
 }

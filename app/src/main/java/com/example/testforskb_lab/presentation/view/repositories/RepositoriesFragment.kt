@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testforskb_lab.DI.Scopes
-import com.example.testforskb_lab.data.SQLite.SQLiteHelper
+import com.example.testforskb_lab.R
 import com.example.testforskb_lab.presentation.view.adapters.RecyclerReposAdapter
 import com.example.testforskb_lab.databinding.FragmentRepositoriesBinding
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
@@ -22,19 +23,17 @@ import toothpick.Toothpick
 import toothpick.ktp.extension.getInstance
 
 class RepositoriesFragment(
-    private val toolbar: androidx.appcompat.widget.Toolbar,
-    private val account: GoogleSignInAccount,
-    private val imageProfile: CircleImageView
+    private val account: GoogleSignInAccount
 ) : MvpAppCompatFragment(), RepositoriesView {
 
     @InjectPresenter
     lateinit var repositoriesPresenter: RepositoriesPresenter
 
-    private val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
-
     @ProvidePresenter
     fun providePresenter() =
         Toothpick.openScope(Scopes.APP_SCOPE).getInstance(RepositoriesPresenter::class.java)
+
+    private val emptyList: ArrayList<RepositoriesConstructor> = ArrayList()
 
     private var _binding: FragmentRepositoriesBinding? = null
     private val binding get() = _binding!!
@@ -43,9 +42,12 @@ class RepositoriesFragment(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRepositoriesBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+
+        val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
+        val imageProfile: CircleImageView = requireActivity().findViewById(R.id.profile_image)
 
         binding.repositoriesButton.isSelected = true
         binding.progressView.visibility = View.GONE
@@ -60,7 +62,7 @@ class RepositoriesFragment(
         toolbar.visibility = View.VISIBLE
 
         imageProfile.setOnClickListener {
-            repositoriesPresenter.onProfile(account, toolbar, imageProfile)
+            repositoriesPresenter.onProfile(account)
         }
 
         binding.preservedButton.setOnClickListener {
@@ -91,8 +93,7 @@ class RepositoriesFragment(
     private fun showPreserved() {
         val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(),account)
         binding.recyclerView.adapter = RecyclerReposAdapter(
-            listAllSavedRepos,
-            Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
+
         )
 
         binding.searchIcon.setOnClickListener {
@@ -112,10 +113,7 @@ class RepositoriesFragment(
 
     override fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>) {
         stopLoading(binding.progressView)
-        binding.recyclerView.adapter = RecyclerReposAdapter(
-            listRepositories,
-            Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
-        )
-
+        val mRepositoryAdapter = RecyclerReposAdapter{position -> repositoriesPresenter.onListItemClick(position,listRepositories) }
+        binding.recyclerView.adapter = mRepositoryAdapter
     }
 }
