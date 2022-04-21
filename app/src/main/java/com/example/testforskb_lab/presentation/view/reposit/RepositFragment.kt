@@ -1,6 +1,7 @@
 package com.example.testforskb_lab.presentation.view.reposit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +14,13 @@ import com.example.testforskb_lab.parserForDate
 import com.example.testforskb_lab.picassoHelper
 import com.example.testforskb_lab.presentation.presenter.RepositPresenter
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import kotlinx.serialization.json.Json
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 
+const val REPOSITORY = "Repository"
+
 class RepositFragment(
-    private val name: String,
-    private val owner: OwnerConstructor,
-    private val description: String,
-    private val numberOfForks: String,
-    private val numberOfStars: String,
-    private val date: String
 ) : MvpAppCompatFragment(), RepositView {
 
     @InjectPresenter
@@ -37,53 +35,53 @@ class RepositFragment(
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRepositBinding.inflate(inflater, container, false)
-        pullFields()
-        binding.deleteRepos.visibility = View.GONE
-        val helper = SQLiteHelper(requireContext())
-        binding.saveRepos.setOnClickListener {
-            val repos = ReposForLocal()
-            repos.full_name = name
-            repos.created_at = date
-            repos.description = description
-            repos.forks = numberOfForks
-            repos.id_saved_user = helper.getUser().id
-            repos.imageOwner = owner.avatar_url
-            repos.owner = owner.login
-            repos.watchers = numberOfStars
-            helper.insertSavedRepos(repos)
-            binding.deleteRepos.visibility = View.VISIBLE
-            binding.saveRepos.visibility = View.GONE
-        }
 
-
-        if (helper.getUser().id.isEmpty()) {
-            binding.saveRepos.visibility = View.GONE
-        }
-
-        val listRepos = helper.getMyRepos(helper.getUser().id.toString())
-
-        for (i in listRepos) {
-            if (i.owner.login == owner.login) {
-                binding.deleteRepos.visibility = View.VISIBLE
-                binding.saveRepos.visibility = View.GONE
-            }
-        }
-
-        binding.deleteRepos.setOnClickListener {
-            helper.deleteReposFromLocalRepositoryies(helper.getUser().id, name)
-            binding.deleteRepos.visibility = View.GONE
-            binding.saveRepos.visibility = View.VISIBLE
-        }
         return binding.root
     }
 
-    override fun pullFields() {
-        binding.nameRepoTw.text = name
-        binding.creatorName.text = owner.login
-        binding.description.text = description
-        picassoHelper(owner.avatar_url, binding.creatorImg)
-        binding.numberOfForks.text = numberOfForks
-        binding.numberOfStars.text = numberOfStars
-        binding.dateOfCreator.text = parserForDate(date)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments?.takeIf { it.containsKey(REPOSITORY) }?.apply {
+            val repository = Json.decodeFromString(ReposForLocal.serializer(),getString(REPOSITORY)!!)
+            pullFields(repository)
+            binding.deleteRepos.visibility = View.GONE
+            val helper = SQLiteHelper(requireContext())
+            binding.saveRepos.setOnClickListener {
+                helper.insertSavedRepos(repository)
+                binding.deleteRepos.visibility = View.VISIBLE
+                binding.saveRepos.visibility = View.GONE
+            }
+            Log.d("asd",repository.imageOwner)
+
+
+            if (helper.getUser().id.isEmpty()) {
+                binding.saveRepos.visibility = View.GONE
+            }
+
+            val listRepos = helper.getMyRepos(helper.getUser().id)
+
+            for (i in listRepos) {
+                if (i.owner.login == repository.owner) {
+                    binding.deleteRepos.visibility = View.VISIBLE
+                    binding.saveRepos.visibility = View.GONE
+                }
+            }
+
+            binding.deleteRepos.setOnClickListener {
+                helper.deleteReposFromLocalRepositoryies(helper.getUser().id, repository.full_name)
+                binding.deleteRepos.visibility = View.GONE
+                binding.saveRepos.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    override fun pullFields(repository: ReposForLocal) {
+        binding.nameRepoTw.text = repository.full_name
+        binding.creatorName.text = repository.owner
+        binding.description.text = repository.description
+        picassoHelper(repository.imageOwner, binding.creatorImg)
+        binding.numberOfForks.text = repository.forks
+        binding.numberOfStars.text = repository.watchers
+        binding.dateOfCreator.text = parserForDate(repository.created_at)
     }
 }

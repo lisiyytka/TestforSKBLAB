@@ -21,6 +21,7 @@ class ReposForLocal {
     ) {
         this.full_name = full_name
         this.owner = owner
+        this.imageOwner = imageOwner
         this.description = description
         this.forks = forks
         this.watchers = watchers

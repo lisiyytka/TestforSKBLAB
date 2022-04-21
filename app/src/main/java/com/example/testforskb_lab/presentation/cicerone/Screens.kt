@@ -16,23 +16,7 @@ object Screens {
 
     fun Repositories() = FragmentScreen { RepositoriesFragment() }
 
-    fun Reposit(
-        full_name: String,
-        owner: OwnerConstructor,
-        description: String,
-        forks: String,
-        watchers: String,
-        created_at: String
-    ) = FragmentScreen {
-        RepositFragment(
-            full_name,
-            owner,
-            description,
-            forks,
-            watchers,
-            created_at
-        )
-    }
+    fun Reposit(fragment: RepositFragment) = FragmentScreen { fragment }
 
     fun Profile() = FragmentScreen { ProfileFragment() }
 }
