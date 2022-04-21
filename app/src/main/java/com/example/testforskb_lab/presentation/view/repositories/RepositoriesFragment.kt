@@ -1,16 +1,20 @@
 package com.example.testforskb_lab.presentation.view.repositories
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testforskb_lab.DI.Scopes
 import com.example.testforskb_lab.R
+import com.example.testforskb_lab.data.SQLite.SQLiteHelper
 import com.example.testforskb_lab.presentation.view.adapters.RecyclerReposAdapter
 import com.example.testforskb_lab.databinding.FragmentRepositoriesBinding
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
+import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.presentation.presenter.RepositoriesPresenter
 import com.example.testforskb_lab.startLoading
 import com.example.testforskb_lab.stopLoading
@@ -20,10 +24,8 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
-import toothpick.ktp.extension.getInstance
 
 class RepositoriesFragment(
-    private val account: GoogleSignInAccount
 ) : MvpAppCompatFragment(), RepositoriesView {
 
     @InjectPresenter
@@ -48,6 +50,8 @@ class RepositoriesFragment(
 
         val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
         val imageProfile: CircleImageView = requireActivity().findViewById(R.id.profile_image)
+        val helper = SQLiteHelper(requireContext())
+        val account = helper.getUser()
 
         binding.repositoriesButton.isSelected = true
         binding.progressView.visibility = View.GONE
@@ -62,7 +66,7 @@ class RepositoriesFragment(
         toolbar.visibility = View.VISIBLE
 
         imageProfile.setOnClickListener {
-            repositoriesPresenter.onProfile(account)
+            repositoriesPresenter.onProfile()
         }
 
         binding.preservedButton.setOnClickListener {
@@ -71,8 +75,8 @@ class RepositoriesFragment(
             showPreserved()
         }
 
-        if (account.id.isNullOrEmpty()) {
-            binding.linearLayout.visibility = View.GONE
+        if (account.id.isEmpty()) {
+            binding.tabs.visibility = View.GONE
         }
 
         binding.repositoriesButton.setOnClickListener {
@@ -91,29 +95,36 @@ class RepositoriesFragment(
     }
 
     private fun showPreserved() {
-        val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(),account)
-        binding.recyclerView.adapter = RecyclerReposAdapter(
-
-        )
+        val helper = SQLiteHelper(requireContext())
+        val account = helper.getUser()
+        val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(), account)
+        sendIntoAdapter(listAllSavedRepos)
 
         binding.searchIcon.setOnClickListener {
             val list: ArrayList<RepositoriesConstructor> = ArrayList()
             for (i in listAllSavedRepos) {
                 if (i.full_name.lowercase().contains(binding.search.text.toString().lowercase()) ||
-                    i.description.lowercase().contains(binding.search.text.toString().lowercase())) {
+                    i.description.lowercase().contains(binding.search.text.toString().lowercase())
+                ) {
                     list.add(i)
                 }
             }
-            binding.recyclerView.adapter = RecyclerReposAdapter(
-                list,
-                Toothpick.openScope(Scopes.APP_SCOPE).getInstance(), account
-            )
+            sendIntoAdapter(list)
         }
     }
 
     override fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>) {
         stopLoading(binding.progressView)
-        val mRepositoryAdapter = RecyclerReposAdapter{position -> repositoriesPresenter.onListItemClick(position,listRepositories) }
+        sendIntoAdapter(listRepositories)
+    }
+
+    private fun sendIntoAdapter(listRepositories: ArrayList<RepositoriesConstructor>) {
+        val mRepositoryAdapter = RecyclerReposAdapter(listRepositories) { position, _ ->
+            repositoriesPresenter.onListItemClick(
+                position,
+                listRepositories
+            )
+        }
         binding.recyclerView.adapter = mRepositoryAdapter
     }
 }

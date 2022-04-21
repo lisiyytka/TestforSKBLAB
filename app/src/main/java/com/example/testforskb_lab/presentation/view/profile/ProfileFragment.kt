@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.example.testforskb_lab.DI.Scopes
 import com.example.testforskb_lab.R
+import com.example.testforskb_lab.data.SQLite.SQLiteHelper
 import com.example.testforskb_lab.databinding.FragmentProfileBinding
+import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import com.example.testforskb_lab.picassoHelper
 import com.example.testforskb_lab.presentation.presenter.ProfilePresenter
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,7 +20,6 @@ import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 
 class ProfileFragment(
-    private val account: GoogleSignInAccount
 ) : MvpAppCompatFragment(),
     ProfileView {
     @InjectPresenter
@@ -35,24 +36,28 @@ class ProfileFragment(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
+        val helper = SQLiteHelper(requireContext())
+        val account = helper.getUser()
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
 
-        if (account.id.isNullOrEmpty()) {
+        if (account.id.isEmpty()) {
             binding.linearCreator.visibility = View.GONE
             binding.clearAll.visibility = View.GONE
         } else {
-            binding.profileMail.text = account.email.toString()
-            picassoHelper(account.photoUrl.toString(), binding.imgProfile)
+            binding.profileMail.text = account.email
+            picassoHelper(account.photoUrl, binding.imgProfile)
         }
 
         binding.clearAll.setOnClickListener {
-            profilePresenter.clearAll(account, requireContext())
+            profilePresenter.clearAll(requireContext())
         }
 
         binding.logoutButton.setOnClickListener {
-            profilePresenter.logOut(toolbar, requireContext())
+            toolbar.visibility = View.GONE
+            profilePresenter.logOut(requireContext())
         }
 
         return binding.root

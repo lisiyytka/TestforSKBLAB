@@ -1,5 +1,8 @@
 package com.example.testforskb_lab.domain.modelForLocalDB
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class ReposForLocal {
     var full_name: String = ""
     var owner: String = ""

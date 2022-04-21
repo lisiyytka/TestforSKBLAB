@@ -5,29 +5,34 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import com.example.testforskb_lab.domain.model.OwnerConstructor
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 
-val DATABASE_NAME = "LocaleDataBase"
-val TABLE_NAME_USERS = "Users"
-val TABLE_NAME_LOCAL_REPOSITORIES = "LocalRepositories"
-val USERS_COL_ID = "Id"
-val LOCAL_REPOSITORIES_FULL_NAME = "FullName"
-val LOCAL_REPOSITORIES_OWNER = "Owner"
-val LOCAL_REPOSITORIES_IMAGE_OWNER = "ImageOwner"
-val LOCAL_REPOSITORIES_DESCRIPTION = "Description"
-val LOCAL_REPOSITORIES_FORKS = "Forks"
-val LOCAL_REPOSITORIES_WATCHERS = "Watchers"
-val LOCAL_REPOSITORIES_CREATED_AT = "CreatedAt"
-val LOCAL_REPOSITORIES_ID_SAVED_USERS = "IdSavedUsers"
+const val DATABASE_NAME = "LocaleDataBase"
+const val TABLE_NAME_USERS = "Users"
+const val TABLE_NAME_LOCAL_REPOSITORIES = "LocalRepositories"
+const val USERS_COL_ID = "Id"
+const val USERS_COL_IMG_URL = "ImgUrl"
+const val USERS_COL_EMAIL = "Email"
+const val LOCAL_REPOSITORIES_FULL_NAME = "FullName"
+const val LOCAL_REPOSITORIES_OWNER = "Owner"
+const val LOCAL_REPOSITORIES_IMAGE_OWNER = "ImageOwner"
+const val LOCAL_REPOSITORIES_DESCRIPTION = "Description"
+const val LOCAL_REPOSITORIES_FORKS = "Forks"
+const val LOCAL_REPOSITORIES_WATCHERS = "Watchers"
+const val LOCAL_REPOSITORIES_CREATED_AT = "CreatedAt"
+const val LOCAL_REPOSITORIES_ID_SAVED_USERS = "IdSavedUsers"
 
 class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableUsers = "CREATE TABLE " + TABLE_NAME_USERS + " (" +
-                USERS_COL_ID + " VARCHAR(256))"
+                USERS_COL_ID + " VARCHAR(256), " +
+                USERS_COL_EMAIL + " VARCHAR(256), " +
+                USERS_COL_IMG_URL + " VARCHAR(256))"
         db?.execSQL(createTableUsers)
 
         val createTableConferences = "CREATE TABLE " + TABLE_NAME_LOCAL_REPOSITORIES + " (" +
@@ -50,6 +55,8 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val db = this.writableDatabase
         val cv = ContentValues()
         cv.put(USERS_COL_ID, userForLocal.id)
+        cv.put(USERS_COL_EMAIL, userForLocal.email)
+        cv.put(USERS_COL_IMG_URL, userForLocal.photoUrl)
         db.insert(TABLE_NAME_USERS, null, cv)
     }
 
@@ -132,10 +139,19 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         if (result.moveToFirst()){
             do {
                 user.id = result.getString(result.getColumnIndex(USERS_COL_ID)).toString()
+                user.email = result.getString(result.getColumnIndex(USERS_COL_EMAIL)).toString()
+                user.photoUrl = result.getString(result.getColumnIndex(USERS_COL_IMG_URL)).toString()
             } while (result.moveToNext())
         }
         result.close()
         db.close()
         return user
+    }
+
+    fun deleteUser(idUser: String) {
+        val db = this.writableDatabase
+        val value = arrayOf(idUser)
+        db.delete(TABLE_NAME_USERS, "$USERS_COL_ID = ?", value)
+        db.close()
     }
 }

@@ -15,13 +15,13 @@ import javax.inject.Inject
 
 @InjectViewState
 class ProfilePresenter @Inject constructor(private val router: Router) : MvpPresenter<ProfileView>(){
-    fun clearAll(account: GoogleSignInAccount, context: Context) {
+    fun clearAll(context: Context) {
         val helper = SQLiteHelper(context)
-        helper.deleteSavedRepos(account.id.toString())
+        val account = helper.getUser()
+        helper.deleteSavedRepos(account.id)
     }
-    fun logOut(toolbar: androidx.appcompat.widget.Toolbar, context: Context) {
+    fun logOut(context: Context) {
         createClient(context).signOut()
-        toolbar.visibility = View.GONE
         router.navigateTo(Screens.Login())
     }
 }

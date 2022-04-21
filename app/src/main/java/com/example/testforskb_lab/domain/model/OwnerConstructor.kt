@@ -1,8 +1,10 @@
 package com.example.testforskb_lab.domain.model
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-class OwnerConstructor(
+@Serializable
+data class OwnerConstructor(
     val login: String,
     val avatar_url: String
 )

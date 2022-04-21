@@ -76,4 +76,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     //progressView
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+    //serialized
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testforskb_lab.DI.Scopes
 import com.example.testforskb_lab.R
 import com.example.testforskb_lab.data.SQLite.SQLiteHelper
+import com.example.testforskb_lab.domain.model.Repositories
 import com.example.testforskb_lab.presentation.cicerone.Screens
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.presentation.presenter.RepositoriesPresenter
@@ -19,8 +20,9 @@ import toothpick.Toothpick
 import javax.inject.Inject
 
 
-class RecyclerReposAdapter(private val onItemClicked: (position: Int)-> Unit, listRepositories: ArrayList<RepositoriesConstructor>) :
+class RecyclerReposAdapter(private val listRepositories: ArrayList<RepositoriesConstructor>, val onItemClicked: (position: Int, listRepositories: ArrayList<RepositoriesConstructor>)-> Unit) :
     RecyclerView.Adapter<RecyclerReposAdapter.RecyclerReposHolder>(){
+
 
     class RecyclerReposHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textViewLarge: TextView = view.findViewById(R.id.textViewLarge)
@@ -35,20 +37,12 @@ class RecyclerReposAdapter(private val onItemClicked: (position: Int)-> Unit, li
 
     override fun onBindViewHolder(holder: RecyclerReposHolder, position: Int) {
         val repository = listRepositories[position]
-        var description = ""
         holder.textViewLarge.text = repository.full_name
         holder.textViewSmall.text = repository.description
-        if (repository.description.isNotEmpty())
-            description = repository.description
         holder.itemView.setOnClickListener{
-            onItemClicked(position)
+            onItemClicked(position,listRepositories)
         }
     }
 
     override fun getItemCount(): Int = listRepositories.size
-
-//    override fun onClick(p0: View?) {
-//        val position = pos
-//        onItemClicked()
-//    }
 }

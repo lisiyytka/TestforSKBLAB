@@ -48,7 +48,7 @@ class LoginFragment(
         }
 
         binding.signInWithoutGoogle.setOnClickListener {
-            loginPresenter.signInWithoutGoogle()
+            loginPresenter.signInWithoutGoogle(requireContext())
         }
 
         return binding.root

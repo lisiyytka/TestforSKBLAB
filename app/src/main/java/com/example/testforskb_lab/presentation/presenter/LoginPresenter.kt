@@ -1,7 +1,10 @@
 package com.example.testforskb_lab.presentation.presenter
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -28,20 +31,22 @@ class LoginPresenter @Inject constructor(private val router: Router) : MvpPresen
         val data = result.data
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {
-            val account = task.getResult(ApiException::class.java)!!
             val helper = SQLiteHelper(context)
-            var user = UserForLocal()
+            val account = task.getResult(ApiException::class.java)!!
+            val user = UserForLocal()
             user.id = account.id.toString()
+            user.photoUrl = account.photoUrl.toString()
+            user.email = account.email.toString()
             helper.insertUser(user)
-            router.navigateTo(Repositories(account))
+            router.navigateTo(Repositories())
         } catch (e: ApiException) {
             Log.w("asds", "Google sign in failed", e)
         }
-
     }
 
-    fun signInWithoutGoogle() {
-        val account: GoogleSignInAccount = GoogleSignInAccount.createDefault()
-        router.navigateTo(Repositories(account))
+    fun signInWithoutGoogle(context: Context) {
+        val helper = SQLiteHelper(context)
+        helper.deleteUser(helper.getUser().id)
+        router.navigateTo(Repositories())
     }
 }

@@ -8,6 +8,7 @@ import com.example.testforskb_lab.data.SQLite.SQLiteHelper
 import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.databinding.FragmentRepositBinding
 import com.example.testforskb_lab.domain.model.OwnerConstructor
+import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import com.example.testforskb_lab.parserForDate
 import com.example.testforskb_lab.picassoHelper
 import com.example.testforskb_lab.presentation.presenter.RepositPresenter
@@ -21,9 +22,7 @@ class RepositFragment(
     private val description: String,
     private val numberOfForks: String,
     private val numberOfStars: String,
-    private val date: String,
-    private val account: GoogleSignInAccount
-
+    private val date: String
 ) : MvpAppCompatFragment(), RepositView {
 
     @InjectPresenter
@@ -47,7 +46,7 @@ class RepositFragment(
             repos.created_at = date
             repos.description = description
             repos.forks = numberOfForks
-            repos.id_saved_user = account.id.toString()
+            repos.id_saved_user = helper.getUser().id
             repos.imageOwner = owner.avatar_url
             repos.owner = owner.login
             repos.watchers = numberOfStars
@@ -57,11 +56,11 @@ class RepositFragment(
         }
 
 
-        if (account.id.isNullOrEmpty()) {
+        if (helper.getUser().id.isEmpty()) {
             binding.saveRepos.visibility = View.GONE
         }
 
-        val listRepos = helper.getMyRepos(account.id.toString())
+        val listRepos = helper.getMyRepos(helper.getUser().id.toString())
 
         for (i in listRepos) {
             if (i.owner.login == owner.login) {
@@ -71,7 +70,7 @@ class RepositFragment(
         }
 
         binding.deleteRepos.setOnClickListener {
-            helper.deleteReposFromLocalRepositoryies(account.id.toString(), name)
+            helper.deleteReposFromLocalRepositoryies(helper.getUser().id, name)
             binding.deleteRepos.visibility = View.GONE
             binding.saveRepos.visibility = View.VISIBLE
         }
