@@ -2,7 +2,7 @@ package com.example.testforskb_lab.domain.model
 
 
 class RepositoriesConstructor {
-    var full_name: String = ""
+    var full_name: String= ""
     var owner: OwnerConstructor = OwnerConstructor("", "")
     var description: String = ""
     var forks: String = ""

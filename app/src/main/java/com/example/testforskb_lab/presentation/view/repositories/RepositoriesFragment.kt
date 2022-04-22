@@ -113,12 +113,12 @@ class RepositoriesFragment(
         }
     }
 
-    override fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>) {
+    override fun showRepos(listRepositories: List<RepositoriesConstructor>) {
         stopLoading(binding.progressView)
         sendIntoAdapter(listRepositories)
     }
 
-    private fun sendIntoAdapter(listRepositories: ArrayList<RepositoriesConstructor>) {
+    private fun sendIntoAdapter(listRepositories: List<RepositoriesConstructor>) {
         val mRepositoryAdapter = RecyclerReposAdapter(listRepositories) { position, _ ->
             repositoriesPresenter.onListItemClick(
                 position,

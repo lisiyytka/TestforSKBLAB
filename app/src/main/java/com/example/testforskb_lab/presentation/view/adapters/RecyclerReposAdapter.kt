@@ -10,8 +10,8 @@ import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 
 
 class RecyclerReposAdapter(
-    private val listRepositories: ArrayList<RepositoriesConstructor>,
-    val onItemClicked: (position: Int, listRepositories: ArrayList<RepositoriesConstructor>) -> Unit
+    private val listRepositories: List<RepositoriesConstructor>,
+    val onItemClicked: (position: Int, listRepositories: List<RepositoriesConstructor>) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerReposAdapter.RecyclerReposHolder>() {
 

@@ -36,39 +36,41 @@ class RepositFragment(
     ): View? {
         _binding = FragmentRepositBinding.inflate(inflater, container, false)
 
+        binding.deleteRepos.visibility = View.GONE
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         arguments?.takeIf { it.containsKey(REPOSITORY) }?.apply {
             val repository = Json.decodeFromString(ReposForLocal.serializer(),getString(REPOSITORY)!!)
             pullFields(repository)
-            binding.deleteRepos.visibility = View.GONE
             val helper = SQLiteHelper(requireContext())
+
             binding.saveRepos.setOnClickListener {
+                repository.id_saved_user = helper.getUser().email
                 helper.insertSavedRepos(repository)
                 binding.deleteRepos.visibility = View.VISIBLE
                 binding.saveRepos.visibility = View.GONE
             }
-            Log.d("asd",repository.imageOwner)
-
 
             if (helper.getUser().id.isEmpty()) {
                 binding.saveRepos.visibility = View.GONE
             }
 
-            val listRepos = helper.getMyRepos(helper.getUser().id)
+            val listRepos = helper.getMyRepos(helper.getUser().email)
 
             for (i in listRepos) {
-                if (i.owner.login == repository.owner) {
+                if (i.full_name == repository.full_name) {
                     binding.deleteRepos.visibility = View.VISIBLE
                     binding.saveRepos.visibility = View.GONE
                 }
             }
 
             binding.deleteRepos.setOnClickListener {
-                helper.deleteReposFromLocalRepositoryies(helper.getUser().id, repository.full_name)
+                helper.deleteReposFromLocalRepositoryies(helper.getUser().email, repository.full_name)
                 binding.deleteRepos.visibility = View.GONE
                 binding.saveRepos.visibility = View.VISIBLE
             }

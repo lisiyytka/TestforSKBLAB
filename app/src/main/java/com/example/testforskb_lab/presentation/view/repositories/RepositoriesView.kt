@@ -8,5 +8,5 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(value = AddToEndStrategy::class)
 interface RepositoriesView : MvpView {
     fun searchRepos()
-    fun showRepos(listRepositories: ArrayList<RepositoriesConstructor>)
+    fun showRepos(listRepositories: List<RepositoriesConstructor>)
 }
