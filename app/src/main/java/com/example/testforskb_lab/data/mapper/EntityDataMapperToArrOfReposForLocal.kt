@@ -27,4 +27,16 @@ class EntityDataMapperToArrOfReposForLocal @Inject constructor() {
         return reposForLocal
     }
 
+     fun transformResponseToLocal(position: Int, list: List<RepositoriesConstructor>): ReposForLocal {
+        val repository = ReposForLocal()
+        repository.full_name = list[position].full_name
+        repository.owner = list[position].owner.login
+        repository.imageOwner = list[position].owner.avatar_url
+        repository.description = list[position].description
+        repository.forks = list[position].forks
+        repository.watchers = list[position].watchers
+        repository.created_at = list[position].created_at
+        return repository
+    }
+
 }

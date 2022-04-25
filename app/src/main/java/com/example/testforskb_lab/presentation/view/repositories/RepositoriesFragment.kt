@@ -58,6 +58,7 @@ class RepositoriesFragment(
 
         val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
         val imageProfile: CircleImageView = requireActivity().findViewById(R.id.profile_image)
+
         val helper = SQLiteHelper(requireContext())
         val account = helper.getUser()
 

@@ -10,6 +10,7 @@ import com.example.testforskb_lab.presentation.cicerone.Screens
 import com.example.testforskb_lab.domain.model.Repositories
 import com.example.testforskb_lab.presentation.view.repositories.RepositoriesView
 import com.example.testforskb_lab.data.SQLite.SQLiteHelper
+import com.example.testforskb_lab.data.mapper.EntityDataMapperToArrOfReposForLocal
 import com.example.testforskb_lab.domain.interactors.InteractorForResponse
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
@@ -34,7 +35,8 @@ import javax.inject.Inject
 @InjectViewState
 class RepositoriesPresenter @Inject constructor(
     private val router: Router,
-    private val interactor: InteractorForResponse
+    private val interactor: InteractorForResponse,
+    private val entity: EntityDataMapperToArrOfReposForLocal
 ) :
     MvpPresenter<RepositoriesView>() {
 
@@ -84,19 +86,10 @@ class RepositoriesPresenter @Inject constructor(
     }
 
     fun onListItemClick(position: Int, list: List<RepositoriesConstructor>) {
-        val repository = ReposForLocal()
-        repository.full_name = list[position].full_name
-        repository.owner = list[position].owner.login
-        repository.imageOwner = list[position].owner.avatar_url
-        repository.description = list[position].description
-        repository.forks = list[position].forks
-        repository.watchers = list[position].watchers
-        repository.created_at = list[position].created_at
-
+        val repository = entity.transformResponseToLocal(position, list)
         router.navigateTo(
             Screens.Reposit(repository)
         )
-        Log.d("asd", repository.imageOwner)
     }
 
     @SuppressLint("CheckResult")
