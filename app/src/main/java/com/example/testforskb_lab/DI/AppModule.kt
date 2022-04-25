@@ -17,6 +17,7 @@ fun appModule(context: Context) = module {
     bind(NavigatorHolder::class.java).toInstance(cicerone.getNavigatorHolder())
 
     bind(GithubApi::class.java).toProvider(ProviderRetrofitClient::class.java)
+
     val localRepository = LocalRepository(context)
     bind(SQLiteOpenHelper::class.java).toInstance(localRepository)
 }

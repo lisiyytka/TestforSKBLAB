@@ -8,4 +8,8 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(value = AddToEndStrategy::class)
 interface RepositView : MvpView {
     fun pullFields(repository: ReposForLocal)
+    fun onClickSaveRepository()
+    fun isUserEmpty()
+    fun repositoryFullName()
+    fun onClickDeleteRepository()
 }

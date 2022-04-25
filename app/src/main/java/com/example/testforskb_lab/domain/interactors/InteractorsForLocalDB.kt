@@ -4,15 +4,17 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.testforskb_lab.data.SQLite.*
+import com.example.testforskb_lab.data.repository.LocalRepository
 import com.example.testforskb_lab.domain.model.OwnerConstructor
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import javax.inject.Inject
 
-class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQLiteOpenHelper){
+class InteractorsForLocalDB @Inject constructor(private val localRepository: LocalRepository){
+
     fun insertUser(userForLocal: UserForLocal) {
-        val db = sqLiteOpenHelper.writableDatabase
+        val db = localRepository.writableDatabase
         val cv = ContentValues()
         cv.put(USERS_COL_ID, userForLocal.id)
         cv.put(USERS_COL_EMAIL, userForLocal.email)
@@ -21,7 +23,7 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
     }
 
     fun insertSavedRepos(reposForLocal: ReposForLocal) {
-        val db = sqLiteOpenHelper.writableDatabase
+        val db = localRepository.writableDatabase
         val cv = ContentValues()
         cv.put(LOCAL_REPOSITORIES_FULL_NAME, reposForLocal.full_name)
         cv.put(LOCAL_REPOSITORIES_OWNER, reposForLocal.owner)
@@ -37,7 +39,7 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
     @SuppressLint("Range")
     fun getMyRepos(id: String): ArrayList<RepositoriesConstructor> {
         val listMyRepos: ArrayList<RepositoriesConstructor> = ArrayList()
-        var db = sqLiteOpenHelper.readableDatabase
+        var db = localRepository.readableDatabase
         var query =
             "SELECT * FROM $TABLE_NAME_LOCAL_REPOSITORIES WHERE $LOCAL_REPOSITORIES_ID_SAVED_USERS = ?"
         val value = arrayOf(id)
@@ -72,7 +74,7 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
     }
 
     fun deleteReposFromLocalRepositoryies(idUser: String, nameRepos: String) {
-        val db = sqLiteOpenHelper.writableDatabase
+        val db = localRepository.writableDatabase
         val values = arrayOf(idUser, nameRepos)
         db.delete(
             TABLE_NAME_LOCAL_REPOSITORIES,
@@ -83,7 +85,7 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
     }
 
     fun deleteSavedRepos(idUser: String) {
-        val db = sqLiteOpenHelper.writableDatabase
+        val db = localRepository.writableDatabase
         val value = arrayOf(idUser)
         db.delete(TABLE_NAME_LOCAL_REPOSITORIES, "$LOCAL_REPOSITORIES_ID_SAVED_USERS = ?", value)
         db.close()
@@ -91,9 +93,8 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
 
     @SuppressLint("Range")
     fun getUser(): UserForLocal {
-        val list: MutableList<UserForLocal> = ArrayList()
         val user = UserForLocal()
-        val db = sqLiteOpenHelper.readableDatabase
+        val db = localRepository.readableDatabase
         val query = "Select * from $TABLE_NAME_USERS"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()){
@@ -109,7 +110,7 @@ class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQ
     }
 
     fun deleteUser(idUser: String) {
-        val db = sqLiteOpenHelper.writableDatabase
+        val db = localRepository.writableDatabase
         val value = arrayOf(idUser)
         db.delete(TABLE_NAME_USERS, "$USERS_COL_ID = ?", value)
         db.close()
