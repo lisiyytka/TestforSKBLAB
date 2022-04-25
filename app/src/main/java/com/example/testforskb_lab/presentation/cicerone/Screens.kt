@@ -2,6 +2,7 @@ package com.example.testforskb_lab.presentation.cicerone
 
 import com.example.testforskb_lab.presentation.view.login.LoginFragment
 import com.example.testforskb_lab.domain.model.OwnerConstructor
+import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import com.example.testforskb_lab.presentation.view.profile.ProfileFragment
 import com.example.testforskb_lab.presentation.view.reposit.RepositFragment
@@ -16,7 +17,7 @@ object Screens {
 
     fun Repositories() = FragmentScreen { RepositoriesFragment() }
 
-    fun Reposit(fragment: RepositFragment) = FragmentScreen { fragment }
+    fun Reposit(repository: ReposForLocal) = FragmentScreen { RepositFragment.instance(repository) }
 
     fun Profile() = FragmentScreen { ProfileFragment() }
 }

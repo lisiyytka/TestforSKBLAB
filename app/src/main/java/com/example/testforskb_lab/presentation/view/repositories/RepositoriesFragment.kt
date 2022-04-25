@@ -1,10 +1,12 @@
 package com.example.testforskb_lab.presentation.view.repositories
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,10 +22,15 @@ import com.example.testforskb_lab.startLoading
 import com.example.testforskb_lab.stopLoading
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import de.hdodenhof.circleimageview.CircleImageView
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
+import java.util.concurrent.TimeUnit
 
 class RepositoriesFragment(
 ) : MvpAppCompatFragment(), RepositoriesView {
@@ -40,6 +47,7 @@ class RepositoriesFragment(
     private var _binding: FragmentRepositoriesBinding? = null
     private val binding get() = _binding!!
 
+    @SuppressLint("CheckResult")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,12 +64,8 @@ class RepositoriesFragment(
         binding.repositoriesButton.isSelected = true
         binding.progressView.visibility = View.GONE
 
-        repositoriesPresenter.emptyList(binding.search.text.toString())
-
-        binding.searchIcon.setOnClickListener {
-            startLoading(binding.progressView)
-            searchRepos()
-        }
+        repositoriesPresenter.search(binding.search)
+        repositoriesPresenter.emptyList(binding.search.query.toString())
 
         toolbar.visibility = View.VISIBLE
 
@@ -91,7 +95,7 @@ class RepositoriesFragment(
     }
 
     override fun searchRepos() {
-        repositoriesPresenter.setSearchRepositories(binding.search.text.toString())
+        repositoriesPresenter.setSearchRepositories(binding.search.query.toString())
     }
 
     private fun showPreserved() {
@@ -99,22 +103,9 @@ class RepositoriesFragment(
         val account = helper.getUser()
         val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(), account)
         sendIntoAdapter(listAllSavedRepos)
-
-        binding.searchIcon.setOnClickListener {
-            val list: ArrayList<RepositoriesConstructor> = ArrayList()
-            for (i in listAllSavedRepos) {
-                if (i.full_name.lowercase().contains(binding.search.text.toString().lowercase()) ||
-                    i.description.lowercase().contains(binding.search.text.toString().lowercase())
-                ) {
-                    list.add(i)
-                }
-            }
-            sendIntoAdapter(list)
-        }
     }
 
     override fun showRepos(listRepositories: List<RepositoriesConstructor>) {
-        stopLoading(binding.progressView)
         sendIntoAdapter(listRepositories)
     }
 
@@ -126,5 +117,13 @@ class RepositoriesFragment(
             )
         }
         binding.recyclerView.adapter = mRepositoryAdapter
+    }
+
+    override fun showLoading(){
+        startLoading(binding.progressView)
+    }
+
+    override fun hideLoading(){
+        stopLoading(binding.progressView)
     }
 }

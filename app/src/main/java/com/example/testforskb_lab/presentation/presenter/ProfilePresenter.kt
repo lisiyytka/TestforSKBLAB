@@ -18,7 +18,7 @@ class ProfilePresenter @Inject constructor(private val router: Router) : MvpPres
     fun clearAll(context: Context) {
         val helper = SQLiteHelper(context)
         val account = helper.getUser()
-        helper.deleteSavedRepos(account.id)
+        helper.deleteSavedRepos(account.email)
     }
     fun logOut(context: Context) {
         createClient(context).signOut()

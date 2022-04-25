@@ -9,4 +9,6 @@ import moxy.viewstate.strategy.StateStrategyType
 interface RepositoriesView : MvpView {
     fun searchRepos()
     fun showRepos(listRepositories: List<RepositoriesConstructor>)
+    fun showLoading()
+    fun hideLoading()
 }

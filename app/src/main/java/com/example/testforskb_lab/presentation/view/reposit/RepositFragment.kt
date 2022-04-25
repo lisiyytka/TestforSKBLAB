@@ -86,4 +86,13 @@ class RepositFragment(
         binding.numberOfStars.text = repository.watchers
         binding.dateOfCreator.text = parserForDate(repository.created_at)
     }
+
+    companion object{
+        fun instance(repository: ReposForLocal): RepositFragment {
+            val jsonRepo = Json.encodeToString(ReposForLocal.serializer(), repository)
+            val fragment = RepositFragment()
+            fragment.arguments = Bundle().apply { putString(REPOSITORY, jsonRepo) }
+            return fragment
+        }
+    }
 }
