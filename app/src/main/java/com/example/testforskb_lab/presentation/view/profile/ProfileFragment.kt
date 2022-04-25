@@ -37,22 +37,13 @@ class ProfileFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val helper = SQLiteHelper(requireContext())
-        val account = helper.getUser()
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
 
-        if (account.id.isEmpty()) {
-            binding.linearCreator.visibility = View.GONE
-            binding.clearAll.visibility = View.GONE
-        } else {
-            binding.profileMail.text = account.email
-            picassoHelper(account.photoUrl, binding.imgProfile)
-        }
+        profilePresenter.showProfile()
 
         binding.clearAll.setOnClickListener {
-            profilePresenter.clearAll(requireContext())
+            profilePresenter.clearAll()
         }
 
         binding.logoutButton.setOnClickListener {
@@ -61,5 +52,15 @@ class ProfileFragment(
         }
 
         return binding.root
+    }
+
+    override fun showProfileInfo(account : UserForLocal) {
+        if (account.id.isEmpty()) {
+            binding.linearCreator.visibility = View.GONE
+            binding.clearAll.visibility = View.GONE
+        } else {
+            binding.profileMail.text = account.email
+            picassoHelper(account.photoUrl, binding.imgProfile)
+        }
     }
 }

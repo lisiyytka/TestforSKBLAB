@@ -11,4 +11,5 @@ interface RepositoriesView : MvpView {
     fun showRepos(listRepositories: List<RepositoriesConstructor>)
     fun showLoading()
     fun hideLoading()
+    fun showTabs()
 }

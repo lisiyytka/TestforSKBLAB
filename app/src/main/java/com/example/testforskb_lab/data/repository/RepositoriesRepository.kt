@@ -2,7 +2,6 @@ package com.example.testforskb_lab.data.repository
 
 import android.util.Log
 import com.example.testforskb_lab.data.api.GithubApi
-import com.example.testforskb_lab.data.api.ProviderRetrofitClient
 import com.example.testforskb_lab.data.mapper.EntityDataMapperToArrOfReposForLocal
 import com.example.testforskb_lab.domain.model.Repositories
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor

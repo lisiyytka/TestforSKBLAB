@@ -1,6 +1,7 @@
 package com.example.testforskb_lab.presentation.view.repositories
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -59,8 +60,7 @@ class RepositoriesFragment(
         val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
         val imageProfile: CircleImageView = requireActivity().findViewById(R.id.profile_image)
 
-        val helper = SQLiteHelper(requireContext())
-        val account = helper.getUser()
+        repositoriesPresenter.checkLogin()
 
         binding.repositoriesButton.isSelected = true
         binding.progressView.visibility = View.GONE
@@ -80,10 +80,6 @@ class RepositoriesFragment(
             showPreserved()
         }
 
-        if (account.id.isEmpty()) {
-            binding.tabs.visibility = View.GONE
-        }
-
         binding.repositoriesButton.setOnClickListener {
             showRepos(emptyList)
             binding.preservedButton.isSelected = false
@@ -100,9 +96,7 @@ class RepositoriesFragment(
     }
 
     private fun showPreserved() {
-        val helper = SQLiteHelper(requireContext())
-        val account = helper.getUser()
-        val listAllSavedRepos = repositoriesPresenter.getRepos(requireContext(), account)
+        val listAllSavedRepos = repositoriesPresenter.getRepos()
         sendIntoAdapter(listAllSavedRepos)
     }
 
@@ -126,5 +120,9 @@ class RepositoriesFragment(
 
     override fun hideLoading(){
         stopLoading(binding.progressView)
+    }
+
+    override fun showTabs(){
+        binding.tabs.visibility = View.GONE
     }
 }

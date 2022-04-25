@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.LogPrinter
+import android.view.View
 import android.widget.SearchView
 import com.example.testforskb_lab.presentation.cicerone.Screens
 import com.example.testforskb_lab.domain.model.Repositories
@@ -12,6 +13,7 @@ import com.example.testforskb_lab.presentation.view.repositories.RepositoriesVie
 import com.example.testforskb_lab.data.SQLite.SQLiteHelper
 import com.example.testforskb_lab.data.mapper.EntityDataMapperToArrOfReposForLocal
 import com.example.testforskb_lab.domain.interactors.InteractorForResponse
+import com.example.testforskb_lab.domain.interactors.InteractorsForLocalDB
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
 import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
 import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
@@ -36,7 +38,8 @@ import javax.inject.Inject
 class RepositoriesPresenter @Inject constructor(
     private val router: Router,
     private val interactor: InteractorForResponse,
-    private val entity: EntityDataMapperToArrOfReposForLocal
+    private val entity: EntityDataMapperToArrOfReposForLocal,
+    private val interactorsForLocalDB: InteractorsForLocalDB
 ) :
     MvpPresenter<RepositoriesView>() {
 
@@ -78,11 +81,8 @@ class RepositoriesPresenter @Inject constructor(
     }
 
     fun getRepos(
-        context: Context,
-        account: UserForLocal
     ): ArrayList<RepositoriesConstructor> {
-        val helper = SQLiteHelper(context)
-        return helper.getMyRepos(account.email)
+        return interactorsForLocalDB.getMyRepos(interactorsForLocalDB.getUser().email)
     }
 
     fun onListItemClick(position: Int, list: List<RepositoriesConstructor>) {
@@ -116,5 +116,11 @@ class RepositoriesPresenter @Inject constructor(
             .subscribe {
                 setSearchRepositories(it)
             }
+    }
+
+    fun checkLogin(){
+        if (interactorsForLocalDB.getUser().id.isEmpty()) {
+            viewState.showTabs()
+        }
     }
 }

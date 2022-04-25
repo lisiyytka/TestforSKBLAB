@@ -1,5 +1,7 @@
 package com.example.testforskb_lab.presentation.view.login
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,13 +34,13 @@ class LoginFragment(
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         toolbar.visibility = View.GONE
 
@@ -56,6 +58,6 @@ class LoginFragment(
 
     private var mainActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            loginPresenter.signIn(result,requireContext())
+            loginPresenter.signIn(result)
         }
 }

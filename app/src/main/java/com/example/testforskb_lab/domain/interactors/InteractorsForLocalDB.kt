@@ -1,34 +1,16 @@
-package com.example.testforskb_lab.data.SQLite
+package com.example.testforskb_lab.domain.interactors
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
-import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
+import com.example.testforskb_lab.data.SQLite.*
 import com.example.testforskb_lab.domain.model.OwnerConstructor
 import com.example.testforskb_lab.domain.model.RepositoriesConstructor
+import com.example.testforskb_lab.domain.modelForLocalDB.ReposForLocal
+import com.example.testforskb_lab.domain.modelForLocalDB.UserForLocal
 import javax.inject.Inject
 
-const val DATABASE_NAME = "LocaleDataBase"
-const val TABLE_NAME_USERS = "Users"
-const val TABLE_NAME_LOCAL_REPOSITORIES = "LocalRepositories"
-const val USERS_COL_ID = "Id"
-const val USERS_COL_IMG_URL = "ImgUrl"
-const val USERS_COL_EMAIL = "Email"
-const val LOCAL_REPOSITORIES_FULL_NAME = "FullName"
-const val LOCAL_REPOSITORIES_OWNER = "Owner"
-const val LOCAL_REPOSITORIES_IMAGE_OWNER = "ImageOwner"
-const val LOCAL_REPOSITORIES_DESCRIPTION = "Description"
-const val LOCAL_REPOSITORIES_FORKS = "Forks"
-const val LOCAL_REPOSITORIES_WATCHERS = "Watchers"
-const val LOCAL_REPOSITORIES_CREATED_AT = "CreatedAt"
-const val LOCAL_REPOSITORIES_ID_SAVED_USERS = "IdSavedUsers"
-
-class SQLiteHelper @Inject constructor(var context: Context, private val sqLiteOpenHelper: SQLiteOpenHelper) {
-
+class InteractorsForLocalDB @Inject constructor(private val sqLiteOpenHelper: SQLiteOpenHelper){
     fun insertUser(userForLocal: UserForLocal) {
         val db = sqLiteOpenHelper.writableDatabase
         val cv = ContentValues()
